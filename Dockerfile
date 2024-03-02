@@ -16,6 +16,12 @@ COPY requirements.txt /app
 
 RUN python3.10 -m pip install -r requirements.txt
 
+COPY warmer.py .
+
+ENV MODEL=meetkai/functionary-small-v2.2
+
+RUN python warmer.py $MODEL
+
 COPY . /app
 
-CMD python3.10 server_vllm.py --model "meetkai/functionary-small-v2.2" --host 0.0.0.0
+CMD python3.10 server_vllm.py --model $MODEL --host 0.0.0.0
