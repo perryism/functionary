@@ -62,6 +62,8 @@ from functionary.prompt_template import (
 )
 from functionary.prompt_template.prompt_template_v2 import get_random_tool_call_id
 
+from vertexai_middleware import VertexAiMiddleware
+
 TIMEOUT_KEEP_ALIVE = 5  # seconds
 
 logger = init_logger(__name__)
@@ -218,6 +220,7 @@ def create_logprobs(
         )
     return logprobs
 
+app.add_middleware(VertexAiMiddleware)
 
 @app.post("/v1/chat/completions")
 async def create_chat_completion(raw_request: Request):
