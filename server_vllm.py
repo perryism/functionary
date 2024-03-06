@@ -222,7 +222,7 @@ def create_logprobs(
 
 app.add_middleware(VertexAiMiddleware)
 
-@app.post("/v1/chat/completions")
+@app.post("/vertexai")
 async def create_chat_completion(raw_request: Request):
     """Completion API similar to OpenAI's API.
     See  https://platform.openai.com/docs/api-reference/chat/create

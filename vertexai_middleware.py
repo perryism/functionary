@@ -5,7 +5,7 @@ from starlette.types import Message
 
 
 class VertexAiMiddleware:
-    applied_urls = ["/v1/chat/completions"]
+    applied_urls = ["/vertexai"]
 
     def __init__(self, app):
         self.app = app
