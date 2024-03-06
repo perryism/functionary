@@ -1,20 +1,10 @@
-FROM nvidia/cuda:11.2.2-runtime-ubuntu20.04 
-
-RUN apt-get update --yes --quiet
-RUN apt install software-properties-common -y && add-apt-repository ppa:deadsnakes/ppa -y && \
-     apt-get install -y python3.10 \
-                        pip \
-                        python3.10-distutils \
-                        curl
-
-RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
-RUN python3.10 -m pip install -U pip
+FROM nvcr.io/nvidia/pytorch:23.10-py3
 
 WORKDIR /app
 
 COPY requirements.txt /app
 
-RUN python3.10 -m pip install -r requirements.txt
+RUN python -m pip install -r requirements.txt && python -m pip uninstall -y transformer-engine
 
 COPY warmer.py .
 
@@ -24,4 +14,9 @@ RUN python warmer.py $MODEL
 
 COPY . /app
 
-CMD python3.10 server_vllm.py --model $MODEL --host 0.0.0.0
+EXPOSE 8000
+
+ENV PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:256
+
+CMD python server_vllm.py --model $MODEL --host 0.0.0.0  --dtype=half --max-model-len=1024 --gpu-memory-utilization=1.0
+
