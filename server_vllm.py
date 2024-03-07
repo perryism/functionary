@@ -222,6 +222,10 @@ def create_logprobs(
 
 app.add_middleware(VertexAiMiddleware)
 
+@app.get("/ping")
+async def ping():
+    return "pong"
+
 @app.post("/vertexai")
 async def create_chat_completion(raw_request: Request):
     """Completion API similar to OpenAI's API.
